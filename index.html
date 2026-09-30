@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS Club DevSpace - Project Showcase</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // 🎨 THIS IS YOUR COLOR PALETTE CONTROL CENTER
+                        // Changing these hex codes updates all buttons, accents, glows, and highlights across the ENTIRE site!
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            400: '#34d399', // Bright accent (icons, highlights)
+                            500: '#10b981', // Main brand color
+                            600: '#059669', // Primary buttons
+                            700: '#047857', // Hover dark state
+                            900: '#064e3b',
+                        },
+                        slate: {
+                            850: '#131e32',
+                            900: '#0f172a', // Card backgrounds
+                            950: '#020617', // Page background
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(99, 102, 241, 0.1);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-30 glass border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 overflow-hidden flex items-center justify-center shadow-lg shadow-brand-500/20">
+                    <img src="WHS_Mascot.png" alt="CS Club Logo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/40x40/10b981/ffffff?text=CS'">
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                        CS Club <span class="text-brand-400">DevSpace</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">Student Project Directory & Code Showcase</p>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="hidden md:flex items-center gap-6 px-4 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs">
+                <div class="text-center">
+                    <span class="block font-bold text-slate-200 text-sm" id="stat-total">0</span>
+                    <span class="text-slate-400">Total Projects</span>
+                </div>
+                <div class="h-6 w-px bg-slate-800"></div>
+                <div class="text-center">
+                    <span class="block font-bold text-amber-400 text-sm" id="stat-wip">0</span>
+                    <span class="text-slate-400">In Progress</span>
+                </div>
+                <div class="h-6 w-px bg-slate-800"></div>
+                <div class="text-center">
+                    <span class="block font-bold text-emerald-400 text-sm" id="stat-completed">0</span>
+                    <span class="text-slate-400">Completed</span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-3">
+                <!-- Role & Account Indicator -->
+                <button id="role-toggle-btn" class="px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-xs font-semibold transition flex items-center gap-2">
+                    <span id="role-badge" class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 text-[10px]">
+                        💻 Member
+                    </span>
+                    <span id="user-display-email" class="text-slate-400 hover:text-white text-[11px] hidden sm:inline">Sign In</span>
+                </button>
+
+                <button id="open-blueprint-btn" class="px-3.5 py-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs sm:text-sm font-medium transition flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-brand-400"></i>
+                    <span class="hidden sm:inline">How It Works</span>
+                </button>
+                <button id="open-submit-modal-btn" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-medium text-xs sm:text-sm shadow-lg shadow-brand-600/30 transition flex items-center gap-2 active:scale-95">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Submit Project</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
+        
+        <!-- Hero Banner -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 p-6 sm:p-8">
+            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-brand-600/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 max-w-2xl">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-400 border border-brand-500/20 mb-3">
+                    🚀 Showcase & Peer Review Hub
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    Explore student innovations, build together.
+                </h2>
+                <p class="mt-2 text-slate-300 text-sm sm:text-base leading-relaxed">
+                    Discover projects created by high school CS club members. Vote for your favorites, give constructive feedback, and submit your own code!
+                </p>
+            </div>
+        </div>
+
+        <!-- Filter & Search Bar Section -->
+        <div class="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+            <!-- Search Input -->
+            <div class="relative flex-1 max-w-md">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+                <input type="text" id="search-input" placeholder="Search by title, author, or tech tag..." 
+                    class="w-full pl-10 pr-9 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-brand-500 transition">
+                <button id="clear-search-btn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Filters & Sorting -->
+            <div class="flex items-center gap-3 overflow-x-auto pb-1 md:pb-0">
+                <!-- Status Filter Pills -->
+                <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
+                    <button data-filter="all" class="filter-pill px-3 py-1.5 rounded-lg bg-brand-600 text-white shadow transition">
+                        All
+                    </button>
+                    <button data-filter="wip" class="filter-pill px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 transition">
+                        ⚡ WIP
+                    </button>
+                    <button data-filter="completed" class="filter-pill px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 transition">
+                        ✅ Completed
+                    </button>
+                </div>
+
+                <!-- Sort Dropdown -->
+                <select id="sort-select" class="bg-slate-900 border border-slate-800 text-slate-300 text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-brand-500">
+                    <option value="newest">Newest First</option>
+                    <option value="upvotes">Most Upvoted</option>
+                    <option value="title">Alphabetical</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Projects Grid Container -->
+        <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamically populated by JS -->
+        </div>
+
+        <!-- Empty State Message -->
+        <div id="empty-state" class="hidden flex-col items-center justify-center py-16 text-center border-2 border-dashed border-slate-800 rounded-2xl bg-slate-900/40">
+            <div class="w-16 h-16 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-slate-500 text-2xl mb-4">
+                <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-300">No projects found</h3>
+            <p class="text-xs text-slate-500 mt-1 max-w-sm">
+                Try adjusting your search terms or filter selection. Be the first to submit a project!
+            </p>
+            <button id="reset-search-btn" class="mt-4 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium border border-slate-700 transition">
+                Reset Filters
+            </button>
+        </div>
+    </main>
+
+    <!-- Modal: Google Account Authentication & Automatic Admin Detection -->
+    <div id="role-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl transform scale-95 transition-transform duration-200">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                        <i class="fa-brands fa-google text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Google Account Auth</h3>
+                        <p class="text-xs text-slate-400">Auto-detects admin access by email address</p>
+                    </div>
+                </div>
+                <button class="close-role-modal text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Current User State Status Box -->
+            <div id="current-account-status" class="p-3.5 rounded-xl border border-slate-800 bg-slate-950/80 mb-4 flex items-center justify-between text-xs">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-slate-200" id="avatar-circle">
+                        ?
+                    </div>
+                    <div>
+                        <div class="font-bold text-slate-200" id="current-user-email">Not Signed In</div>
+                        <div class="text-[10px] text-slate-400" id="current-user-role-label">Standard Member Access</div>
+                    </div>
+                </div>
+                <button id="signout-btn" class="hidden text-[11px] text-rose-400 hover:text-rose-300 font-semibold underline">
+                    Sign Out
+                </button>
+            </div>
+
+            <!-- Sign in options -->
+            <div class="space-y-4 text-xs">
+                <!-- Real Google OAuth Button -->
+                <button id="google-signin-btn" class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold transition flex items-center justify-center gap-2 shadow-md">
+                    <i class="fa-brands fa-google text-red-500 text-base"></i>
+                    <span>Sign in with Google Account</span>
+                </button>
+
+                <div class="relative flex py-1 items-center">
+                    <div class="flex-grow border-t border-slate-800"></div>
+                    <span class="flex-shrink mx-3 text-[10px] text-slate-500 uppercase tracking-widest">or test account quick-switch</span>
+                    <div class="flex-grow border-t border-slate-800"></div>
+                </div>
+
+                <!-- Admin Account Quick Selector for Testing/Iframe Demo -->
+                <div class="p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/5">
+                    <label class="block text-[11px] font-semibold text-amber-300 mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-crown text-amber-400"></i>
+                        Select from 6 Hardcoded Admin Accounts:
+                    </label>
+                    <select id="admin-account-select" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-xs focus:outline-none focus:border-amber-500 mb-2">
+                        <option value="">-- Choose an Admin Google Account --</option>
+                        <option value="president@csclub.edu">president@csclub.edu (President)</option>
+                        <option value="vicepresident@csclub.edu">vicepresident@csclub.edu (Vice President)</option>
+                        <option value="techlead@csclub.edu">techlead@csclub.edu (Tech Lead)</option>
+                        <option value="advisor@school.edu">advisor@school.edu (Faculty Advisor)</option>
+                        <option value="secretary@csclub.edu">secretary@csclub.edu (Secretary)</option>
+                        <option value="treasurer@csclub.edu">treasurer@csclub.edu (Treasurer)</option>
+                    </select>
+                    
+                    <div class="flex gap-2">
+                        <input type="email" id="custom-email-input" placeholder="Or type any @school.edu email..." 
+                            class="flex-1 px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-xs focus:outline-none focus:border-indigo-500">
+                        <button id="apply-custom-email-btn" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition">
+                            Detect Access
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info note -->
+                <p class="text-[11px] text-slate-400 leading-relaxed bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+                    <strong class="text-slate-300">How auto-detection works:</strong> The app checks your Google email against the list of 6 authorized board emails. Matching accounts automatically receive <span class="text-amber-400 font-semibold">Board Admin</span> privileges instantly!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Project Modal -->
+    <div id="submit-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-xl w-full p-6 sm:p-8 shadow-2xl transform scale-95 transition-transform duration-200 overflow-y-auto max-h-[90vh]">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-white">Submit Club Project</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Share your creation with the CS club community</p>
+                </div>
+                <button class="close-modal text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="project-form" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Project Title *</label>
+                    <input type="text" id="form-title" required placeholder="e.g. AP CS A Practice Quiz Bot"
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-brand-500">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Author Name(s) *</label>
+                        <input type="text" id="form-author" required placeholder="e.g. Alex Chen & Maria R."
+                            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Status *</label>
+                        <select id="form-status" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-brand-500">
+                            <option value="wip">⚡ In Progress (WIP)</option>
+                            <option value="completed">✅ Completed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Primary Project Link (GitHub / Scratch / Web) *</label>
+                    <input type="url" id="form-link" required placeholder="https://github.com/username/project"
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-brand-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Tech Stack & Tags (Comma Separated) *</label>
+                    <input type="text" id="form-tags" required placeholder="e.g. Python, Tkinter, SQLite, Algorithmic"
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-brand-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Project Description *</label>
+                    <textarea id="form-description" rows="3" required placeholder="What does your project do? What problem does it solve?"
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-brand-500 resize-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Usage Instructions / How to Run</label>
+                    <textarea id="form-instructions" rows="2" placeholder="e.g. Clone repo, run `python main.py`, or open index.html in browser..."
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-brand-500 resize-none"></textarea>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+                    <button type="button" class="close-modal px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold shadow-lg shadow-brand-600/30 transition">
+                        Publish Project
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Educational Blueprint Modal -->
+    <div id="blueprint-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl transform scale-95 transition-transform duration-200 overflow-y-auto max-h-[90vh]">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20">
+                        <i class="fa-solid fa-diagram-project text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Educational Learning Blueprint</h3>
+                        <p class="text-xs text-slate-400">How this web app is built under the hood</p>
+                    </div>
+                </div>
+                <button class="close-blueprint-modal text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-6 text-sm text-slate-300">
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                    <h4 class="font-bold text-brand-400 flex items-center gap-2 mb-2">
+                        <i class="fa-brands fa-html5 text-amber-500"></i>
+                        1. HTML Structure & Semantic Markup
+                    </h4>
+                    <p class="text-xs leading-relaxed text-slate-400">
+                        The application uses semantic HTML tags like <code class="text-slate-200 font-mono bg-slate-900 px-1 py-0.5 rounded">&lt;header&gt;</code>, <code class="text-slate-200 font-mono bg-slate-900 px-1 py-0.5 rounded">&lt;main&gt;</code>, and <code class="text-slate-200 font-mono bg-slate-900 px-1 py-0.5 rounded">&lt;footer&gt;</code>. Modals use fixed positioning overlays and UI cards update dynamically without page reloads.
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                    <h4 class="font-bold text-brand-400 flex items-center gap-2 mb-2">
+                        <i class="fa-brands fa-css3-alt text-sky-400"></i>
+                        2. CSS Styling & Modern UI (Tailwind CSS)
+                    </h4>
+                    <p class="text-xs leading-relaxed text-slate-400">
+                        We leverage utility-first CSS via <strong>Tailwind CSS</strong> to construct a dark theme with backdrop filters, smooth hover animations, and fully responsive layouts for desktop and mobile screens.
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                    <h4 class="font-bold text-brand-400 flex items-center gap-2 mb-2">
+                        <i class="fa-solid fa-user-lock text-amber-400"></i>
+                        3. Automatic Account RBAC Detection
+                    </h4>
+                    <p class="text-xs leading-relaxed text-slate-400">
+                        The app inspects user email strings upon Google sign-in or manual input. If the email matches any of the 6 hardcoded board member emails, the application unlocks board administration privileges dynamically.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-800 flex justify-end">
+                <button class="close-blueprint-modal px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold transition">
+                    Got it, let's explore!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none px-4 py-3 rounded-xl bg-slate-900 border border-brand-500/50 text-slate-100 text-xs font-medium shadow-xl flex items-center gap-2.5">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toast-msg">Action performed successfully</span>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // 👑 THE 6 HARDCODED BOARD ADMIN EMAILS
+        const ADMIN_EMAILS = [
+            'president@csclub.edu',
+            'vicepresident@csclub.edu',
+            'techlead@csclub.edu',
+            'advisor@school.edu',
+            'secretary@csclub.edu',
+            'treasurer@csclub.edu'
+        ];
+
+        // Firebase Initialization with safety fallback
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "demo-key",
+            authDomain: "demo-csclub.firebaseapp.com",
+            projectId: "demo-csclub"
+        };
+
+        let auth;
+        try {
+            const app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+        } catch (e) {
+            console.log('Firebase initialized in local mock mode.');
+        }
+
+        // Default Sample Projects for High School CS Club
+        const DEFAULT_PROJECTS = [
+            {
+                id: 'proj-1',
+                title: 'AP CS A Interactive Java Quizzer',
+                author: 'Ethan Vance & Maya Patel',
+                status: 'completed',
+                featured: true,
+                link: 'https://github.com/example/apcs-quizzer',
+                tags: ['Java', 'JavaFX', 'AP CS Prep', 'OOP'],
+                description: 'A desktop application created in Java to help students practice multiple-choice questions and free-response code tracing for the AP CS A exam.',
+                instructions: 'Download the JAR file from GitHub releases and run `java -jar Quizzer.jar`. Requires Java 17+.',
+                upvotes: 14,
+                userUpvoted: false,
+                comments: [
+                    { id: 'c1', author: 'Mr. Davis (CS Teacher)', text: 'Awesome tool! The explanations for array recursion are super clear.', time: '2 days ago' },
+                    { id: 'c2', author: 'Leo M.', text: 'Helped me study for our unit 3 test! Could you add a timer feature next?', time: 'Yesterday' }
+                ],
+                createdAt: Date.now() - 86400000 * 3
+            },
+            {
+                id: 'proj-2',
+                title: 'Shadow Realm 2D Platformer',
+                author: 'Jordan K.',
+                status: 'completed',
+                featured: false,
+                link: 'https://scratch.mit.edu/projects/example',
+                tags: ['Scratch', 'Game Dev', 'Physics', '2D Art'],
+                description: 'A smooth 60fps platformer built in Scratch featuring wall jumps, custom physics engines, 5 hand-crafted levels, and ambient music.',
+                instructions: 'Click the green flag on Scratch! Use Arrow Keys or WASD to move, Space to jump.',
+                upvotes: 22,
+                userUpvoted: true,
+                comments: [
+                    { id: 'c3', author: 'Sam T.', text: 'The wall jump mechanics feel so smooth! Level 4 is tricky though.', time: '4 days ago' }
+                ],
+                createdAt: Date.now() - 86400000 * 5
+            },
+            {
+                id: 'proj-3',
+                title: 'School Lunch Menu Discord Bot',
+                author: 'Chloe Lin',
+                status: 'wip',
+                featured: false,
+                link: 'https://github.com/example/school-menu-bot',
+                tags: ['Python', 'Discord.py', 'Web Scraping', 'API'],
+                description: 'A Discord bot that scrapes the school cafeteria menu every morning at 7:00 AM and pings subscribers with the daily specials.',
+                instructions: 'Invite bot to server or run `python bot.py` locally after filling out `.env` token file.',
+                upvotes: 9,
+                userUpvoted: false,
+                comments: [
+                    { id: 'c4', author: 'David K.', text: 'Love this idea! Can you make it send a notification when pizza is served?', time: '3 hours ago' }
+                ],
+                createdAt: Date.now() - 86400000 * 1
+            },
+            {
+                id: 'proj-4',
+                title: 'Club Member Portfolio & Showcase',
+                author: 'DevSpace Web Team',
+                status: 'completed',
+                featured: true,
+                link: 'https://github.com/example/cs-club-devspace',
+                tags: ['Web', 'HTML', 'Tailwind CSS', 'JavaScript'],
+                description: 'A lightweight single-file web application for CS club members to present their projects, gather constructive feedback, and learn web dev basics.',
+                instructions: 'Simply open `index.html` in any web browser. Uses LocalStorage to save data.',
+                upvotes: 31,
+                userUpvoted: true,
+                comments: [
+                    { id: 'c5', author: 'Alex Chen', text: 'Clean dark mode theme! Excited to submit my upcoming AI bot project here.', time: '5 hours ago' }
+                ],
+                createdAt: Date.now() - 86400000 * 7
+            }
+        ];
+
+        // State variables
+        let projects = [];
+        let currentFilter = 'all';
+        let searchQuery = '';
+        let sortBy = 'newest';
+        let currentUserRole = 'collaborator';
+        let currentUserEmail = '';
+
+        // Core Function: Inspect Email and Automatically Assign Role
+        function setAccountByEmail(email) {
+            currentUserEmail = email ? email.trim() : '';
+            const normalizedEmail = currentUserEmail.toLowerCase();
+
+            const isAdmin = ADMIN_EMAILS.map(e => e.toLowerCase()).includes(normalizedEmail);
+
+            if (isAdmin) {
+                currentUserRole = 'admin';
+                showToast(`👑 Recognized Board Admin (${currentUserEmail})!`);
+            } else if (currentUserEmail) {
+                currentUserRole = 'collaborator';
+                showToast(`👤 Signed in as Member (${currentUserEmail})`);
+            } else {
+                currentUserRole = 'collaborator';
+            }
+
+            localStorage.setItem('cs_club_user_email', currentUserEmail);
+            localStorage.setItem('cs_club_user_role', currentUserRole);
+
+            updateRoleBadgeUI();
+            updateModalAccountUI();
+            renderProjects();
+        }
+
+        function updateRoleBadgeUI() {
+            const badge = document.getElementById('role-badge');
+            const emailLabel = document.getElementById('user-display-email');
+
+            if (currentUserRole === 'admin') {
+                badge.className = 'px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-semibold flex items-center gap-1';
+                badge.innerHTML = '<i class="fa-solid fa-crown text-amber-400"></i> Board Admin';
+            } else {
+                badge.className = 'px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 text-[10px]';
+                badge.innerHTML = '💻 Member';
+            }
+
+            emailLabel.textContent = currentUserEmail ? currentUserEmail.split('@')[0] : 'Sign In';
+        }
+
+        function updateModalAccountUI() {
+            const emailElem = document.getElementById('current-user-email');
+            const roleLabel = document.getElementById('current-user-role-label');
+            const avatarCircle = document.getElementById('avatar-circle');
+            const signOutBtn = document.getElementById('signout-btn');
+
+            if (currentUserEmail) {
+                emailElem.textContent = currentUserEmail;
+                avatarCircle.textContent = currentUserEmail.charAt(0).toUpperCase();
+                signOutBtn.classList.remove('hidden');
+
+                if (currentUserRole === 'admin') {
+                    roleLabel.innerHTML = '<span class="text-amber-400 font-bold">👑 Board Admin Privilege Active</span>';
+                    avatarCircle.className = "w-9 h-9 rounded-full bg-amber-500/20 border border-amber-500/50 flex items-center justify-center font-bold text-amber-300";
+                } else {
+                    roleLabel.textContent = 'Standard Member Access';
+                    avatarCircle.className = "w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-slate-200";
+                }
+            } else {
+                emailElem.textContent = 'Not Signed In';
+                roleLabel.textContent = 'Standard Member Access';
+                avatarCircle.textContent = '?';
+                avatarCircle.className = "w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-slate-200";
+                signOutBtn.classList.add('hidden');
+            }
+        }
+
+        // Initialize Data from LocalStorage or Defaults
+        function initData() {
+            const stored = localStorage.getItem('cs_club_projects');
+            if (stored) {
+                try {
+                    projects = JSON.parse(stored);
+                } catch (e) {
+                    console.error('Failed to parse local storage', e);
+                    projects = [...DEFAULT_PROJECTS];
+                }
+            } else {
+                projects = [...DEFAULT_PROJECTS];
+                saveData();
+            }
+
+            const storedEmail = localStorage.getItem('cs_club_user_email');
+            if (storedEmail) {
+                setAccountByEmail(storedEmail);
+            } else {
+                updateRoleBadgeUI();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('cs_club_projects', JSON.stringify(projects));
+            updateStats();
+        }
+
+        // Render All Cards
+        function renderProjects() {
+            const grid = document.getElementById('projects-grid');
+            const emptyState = document.getElementById('empty-state');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            let filtered = projects.filter(project => {
+                const matchesFilter = 
+                    currentFilter === 'all' || 
+                    (currentFilter === 'wip' && project.status === 'wip') ||
+                    (currentFilter === 'completed' && project.status === 'completed');
+
+                const query = searchQuery.toLowerCase().trim();
+                const matchesSearch = !query || 
+                    project.title.toLowerCase().includes(query) ||
+                    project.author.toLowerCase().includes(query) ||
+                    project.description.toLowerCase().includes(query) ||
+                    project.tags.some(t => t.toLowerCase().includes(query));
+
+                return matchesFilter && matchesSearch;
+            });
+
+            filtered.sort((a, b) => {
+                if (a.featured !== b.featured) return b.featured ? 1 : -1;
+                if (sortBy === 'upvotes') return b.upvotes - a.upvotes;
+                if (sortBy === 'title') return a.title.localeCompare(b.title);
+                return b.createdAt - a.createdAt;
+            });
+
+            if (filtered.length === 0) {
+                if (emptyState) {
+                    emptyState.classList.remove('hidden');
+                    emptyState.classList.add('flex');
+                }
+            } else {
+                if (emptyState) {
+                    emptyState.classList.add('hidden');
+                    emptyState.classList.remove('flex');
+                }
+
+                filtered.forEach(project => {
+                    const card = createProjectCard(project);
+                    grid.appendChild(card);
+                });
+            }
+
+            updateStats();
+        }
+
+        // Create individual card element
+        function createProjectCard(project) {
+            const card = document.createElement('div');
+            card.className = `glass-card rounded-2xl p-5 sm:p-6 flex flex-col justify-between relative group ${
+                project.featured ? 'border-amber-500/30 bg-gradient-to-b from-amber-500/5 to-slate-900/60' : ''
+            }`;
+            
+            const isWip = project.status === 'wip';
+            const statusBadgeClass = isWip 
+                ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' 
+                : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+            const statusText = isWip ? '⚡ In Progress' : '✅ Completed';
+
+            const tagsHtml = project.tags.map(tag => 
+                `<span class="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700/60">${escapeHtml(tag)}</span>`
+            ).join('');
+
+            const commentsHtml = project.comments.map(c => `
+                <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-xs flex justify-between items-start gap-2">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between font-semibold text-slate-300 mb-1">
+                            <span>${escapeHtml(c.author)}</span>
+                            <span class="text-[10px] text-slate-500 font-normal">${c.time}</span>
+                        </div>
+                        <p class="text-slate-400 leading-relaxed">${escapeHtml(c.text)}</p>
+                    </div>
+                    ${currentUserRole === 'admin' ? `
+                        <button onclick="deleteComment('${project.id}', '${c.id}')" title="Delete Comment (Admin)" 
+                            class="text-slate-600 hover:text-rose-400 p-1 transition">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    ` : ''}
+                </div>
+            `).join('');
+
+            const isAdmin = currentUserRole === 'admin';
+
+            card.innerHTML = `
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-3 flex-wrap">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold border ${statusBadgeClass}">
+                                ${statusText}
+                            </span>
+                            ${project.featured ? `
+                                <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
+                                    <i class="fa-solid fa-star text-amber-400"></i> Board Choice
+                                </span>
+                            ` : ''}
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            ${isAdmin ? `
+                                <button onclick="toggleFeatureProject('${project.id}')" title="${project.featured ? 'Unpin Board Choice' : 'Pin as Board Choice'}"
+                                    class="p-1.5 rounded-lg border text-xs transition ${project.featured ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-amber-300'}">
+                                    <i class="fa-solid fa-star"></i>
+                                </button>
+                                <button onclick="confirmDeleteProject('${project.id}')" title="Delete Project (Admin)"
+                                    class="p-1.5 rounded-lg border bg-slate-900 text-slate-400 border-slate-800 hover:text-rose-400 hover:border-rose-500/30 text-xs transition">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            ` : ''}
+
+                            <button onclick="toggleUpvote('${project.id}')" 
+                                class="px-3 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 ${
+                                    project.userUpvoted 
+                                    ? 'bg-brand-600 text-white border-brand-500 shadow-md shadow-brand-600/20' 
+                                    : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700'
+                                }">
+                                <i class="fa-solid fa-thumbs-up ${project.userUpvoted ? 'text-white' : 'text-slate-400'}"></i>
+                                <span>${project.upvotes}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-white group-hover:text-brand-400 transition-colors leading-snug">
+                        ${escapeHtml(project.title)}
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+                        <i class="fa-regular fa-user text-slate-500"></i>
+                        <span>Created by <strong class="text-slate-300 font-medium">${escapeHtml(project.author)}</strong></span>
+                    </p>
+
+                    <p class="text-xs sm:text-sm text-slate-300 mt-3 leading-relaxed">
+                        ${escapeHtml(project.description)}
+                    </p>
+
+                    ${project.instructions ? `
+                        <div class="mt-3 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs">
+                            <span class="font-semibold text-brand-400 block mb-0.5">💡 How to run/use:</span>
+                            <span class="text-slate-400 font-mono text-[11px] block">${escapeHtml(project.instructions)}</span>
+                        </div>
+                    ` : ''}
+
+                    <div class="flex flex-wrap gap-1.5 mt-4">
+                        ${tagsHtml}
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-800/80 flex flex-col gap-3">
+                    <div class="flex items-center justify-between gap-2">
+                        <a href="${escapeHtml(project.link)}" target="_blank" rel="noopener noreferrer" 
+                            class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700/80 transition flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-brand-400"></i>
+                            <span>View Source / Demo</span>
+                        </a>
+
+                        <button onclick="toggleCommentSection('${project.id}')" 
+                            class="px-3 py-2 rounded-xl bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs font-medium border border-slate-800 transition flex items-center gap-1.5">
+                            <i class="fa-regular fa-comment"></i>
+                            <span>Feedback (${project.comments.length})</span>
+                        </button>
+                    </div>
+
+                    <div id="comments-${project.id}" class="hidden pt-3 border-t border-slate-800/60 flex flex-col gap-3">
+                        <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                            ${project.comments.length > 0 ? commentsHtml : '<p class="text-xs text-slate-500 italic">No feedback comments yet. Be the first!</p>'}
+                        </div>
+
+                        <form onsubmit="handleAddComment(event, '${project.id}')" class="flex flex-col gap-2 mt-1">
+                            <div class="flex gap-2">
+                                <input type="text" id="author-${project.id}" required placeholder="Your name" value="${escapeHtml(currentUserEmail ? currentUserEmail.split('@')[0] : '')}"
+                                    class="w-1/3 px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-xs focus:outline-none focus:border-brand-500">
+                                <input type="text" id="text-${project.id}" required placeholder="Write constructive feedback..." 
+                                    class="w-2/3 px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-xs focus:outline-none focus:border-brand-500">
+                            </div>
+                            <button type="submit" class="self-end px-3 py-1 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-medium transition">
+                                Post Feedback
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        window.toggleFeatureProject = function(id) {
+            if (currentUserRole !== 'admin') return;
+            const proj = projects.find(p => p.id === id);
+            if (proj) {
+                proj.featured = !proj.featured;
+                saveData();
+                renderProjects();
+                showToast(proj.featured ? '⭐ Highlighted as Board Choice' : 'Unpinned from Board Choice');
+            }
+        };
+
+        window.confirmDeleteProject = function(id) {
+            if (currentUserRole !== 'admin') return;
+            const proj = projects.find(p => p.id === id);
+            if (proj && confirm(`[Admin Control] Are you sure you want to delete "${proj.title}"?`)) {
+                projects = projects.filter(p => p.id !== id);
+                saveData();
+                renderProjects();
+                showToast('🗑️ Project deleted by Admin');
+            }
+        };
+
+        window.deleteComment = function(projectId, commentId) {
+            if (currentUserRole !== 'admin') return;
+            const proj = projects.find(p => p.id === projectId);
+            if (proj) {
+                proj.comments = proj.comments.filter(c => c.id !== commentId);
+                saveData();
+                renderProjects();
+                setTimeout(() => toggleCommentSection(projectId), 50);
+                showToast('Comment deleted by Admin');
+            }
+        };
+
+        window.toggleUpvote = function(id) {
+            const project = projects.find(p => p.id === id);
+            if (project) {
+                if (project.userUpvoted) {
+                    project.upvotes -= 1;
+                    project.userUpvoted = false;
+                    showToast('Upvote removed');
+                } else {
+                    project.upvotes += 1;
+                    project.userUpvoted = true;
+                    showToast('Project upvoted! 👍');
+                }
+                saveData();
+                renderProjects();
+            }
+        };
+
+        window.toggleCommentSection = function(id) {
+            const sec = document.getElementById(`comments-${id}`);
+            if (sec) {
+                sec.classList.toggle('hidden');
+            }
+        };
+
+        window.handleAddComment = function(e, projectId) {
+            e.preventDefault();
+            const authorInput = document.getElementById(`author-${projectId}`);
+            const textInput = document.getElementById(`text-${projectId}`);
+
+            const author = authorInput.value.trim();
+            const text = textInput.value.trim();
+
+            if (!author || !text) return;
+
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                project.comments.push({
+                    id: 'c-' + Date.now(),
+                    author: author,
+                    text: text,
+                    time: 'Just now'
+                });
+                saveData();
+                renderProjects();
+                setTimeout(() => toggleCommentSection(projectId), 50);
+                showToast('Feedback added successfully!');
+            }
+        };
+
+        function updateStats() {
+            const t = document.getElementById('stat-total');
+            const w = document.getElementById('stat-wip');
+            const c = document.getElementById('stat-completed');
+            if (t) t.textContent = projects.length;
+            if (w) w.textContent = projects.filter(p => p.status === 'wip').length;
+            if (c) c.textContent = projects.filter(p => p.status === 'completed').length;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            if (!toast || !toastMsg) return;
+            
+            toastMsg.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initData();
+            renderProjects();
+
+            // Google OAuth Listener
+            document.getElementById('google-signin-btn')?.addEventListener('click', async () => {
+                if (auth && firebaseConfig.apiKey !== "demo-key") {
+                    try {
+                        const provider = new GoogleAuthProvider();
+                        const result = await signInWithPopup(auth, provider);
+                        if (result.user && result.user.email) {
+                            setAccountByEmail(result.user.email);
+                        }
+                    } catch (err) {
+                        console.warn('Google Auth popup fallback active.', err);
+                        showToast('Please select or enter your email below');
+                    }
+                } else {
+                    const email = prompt("Enter your Google Account Email to test automatic admin detection:", "president@csclub.edu");
+                    if (email) setAccountByEmail(email);
+                }
+            });
+
+            document.getElementById('admin-account-select')?.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    setAccountByEmail(e.target.value);
+                }
+            });
+
+            document.getElementById('apply-custom-email-btn')?.addEventListener('click', () => {
+                const val = document.getElementById('custom-email-input').value.trim();
+                if (val) {
+                    setAccountByEmail(val);
+                }
+            });
+
+            document.getElementById('signout-btn')?.addEventListener('click', () => {
+                if (auth && auth.currentUser) {
+                    firebaseSignOut(auth);
+                }
+                setAccountByEmail('');
+                showToast('Signed out successfully');
+            });
+
+            // Search input listener
+            const searchInput = document.getElementById('search-input');
+            const clearSearchBtn = document.getElementById('clear-search-btn');
+
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    searchQuery = e.target.value;
+                    if (clearSearchBtn) {
+                        if (searchQuery) clearSearchBtn.classList.remove('hidden');
+                        else clearSearchBtn.classList.add('hidden');
+                    }
+                    renderProjects();
+                });
+            }
+
+            if (clearSearchBtn) {
+                clearSearchBtn.addEventListener('click', () => {
+                    if (searchInput) searchInput.value = '';
+                    searchQuery = '';
+                    clearSearchBtn.classList.add('hidden');
+                    renderProjects();
+                });
+            }
+
+            document.getElementById('reset-search-btn')?.addEventListener('click', () => {
+                if (searchInput) searchInput.value = '';
+                searchQuery = '';
+                currentFilter = 'all';
+                if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
+                
+                document.querySelectorAll('.filter-pill').forEach(btn => {
+                    btn.classList.remove('bg-brand-600', 'text-white', 'border-brand-500/50');
+                    btn.classList.add('bg-slate-900/80', 'text-slate-400', 'border-slate-800');
+                });
+                const allBtn = document.querySelector('[data-filter="all"]');
+                if (allBtn) allBtn.classList.add('bg-brand-600', 'text-white', 'border-brand-500/50');
+
+                renderProjects();
+            });
+
+            document.querySelectorAll('.filter-pill').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-pill').forEach(b => {
+                        b.classList.remove('bg-brand-600', 'text-white', 'border-brand-500/50');
+                        b.classList.add('bg-slate-900/80', 'text-slate-400', 'border-slate-800');
+                    });
+                    btn.classList.remove('bg-slate-900/80', 'text-slate-400', 'border-slate-800');
+                    btn.classList.add('bg-brand-600', 'text-white', 'border-brand-500/50');
+
+                    currentFilter = btn.getAttribute('data-filter');
+                    renderProjects();
+                });
+            });
+
+            document.getElementById('sort-select')?.addEventListener('change', (e) => {
+                sortBy = e.target.value;
+                renderProjects();
+            });
+
+            // Modals Logic
+            const submitModal = document.getElementById('submit-modal');
+            const openSubmitBtn = document.getElementById('open-submit-modal-btn');
+            const closeSubmitBtns = document.querySelectorAll('.close-modal');
+
+            const openModal = (modal) => {
+                if (!modal) return;
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    const inner = modal.querySelector('> div');
+                    if (inner) {
+                        inner.classList.remove('scale-95');
+                        inner.classList.add('scale-100');
+                    }
+                }, 10);
+            };
+
+            const closeModal = (modal) => {
+                if (!modal) return;
+                modal.classList.add('opacity-0');
+                const inner = modal.querySelector('> div');
+                if (inner) {
+                    inner.classList.remove('scale-100');
+                    inner.classList.add('scale-95');
+                }
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 200);
+            };
+
+            if (openSubmitBtn && submitModal) {
+                openSubmitBtn.addEventListener('click', () => openModal(submitModal));
+            }
+            closeSubmitBtns.forEach(b => b.addEventListener('click', () => closeModal(submitModal)));
+
+            const blueprintModal = document.getElementById('blueprint-modal');
+            const openBlueprintBtn = document.getElementById('open-blueprint-btn');
+            const closeBlueprintBtns = document.querySelectorAll('.close-blueprint-modal');
+
+            if (openBlueprintBtn && blueprintModal) {
+                openBlueprintBtn.addEventListener('click', () => openModal(blueprintModal));
+            }
+            closeBlueprintBtns.forEach(b => b.addEventListener('click', () => closeModal(blueprintModal)));
+
+            const roleModal = document.getElementById('role-modal');
+            const roleToggleBtn = document.getElementById('role-toggle-btn');
+            const closeRoleBtns = document.querySelectorAll('.close-role-modal');
+
+            if (roleToggleBtn && roleModal) {
+                roleToggleBtn.addEventListener('click', () => openModal(roleModal));
+            }
+            closeRoleBtns.forEach(b => b.addEventListener('click', () => closeModal(roleModal)));
+
+            const projectForm = document.getElementById('project-form');
+            if (projectForm) {
+                projectForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+
+                    const title = document.getElementById('form-title').value.trim();
+                    const author = document.getElementById('form-author').value.trim();
+                    const status = document.getElementById('form-status').value;
+                    const link = document.getElementById('form-link').value.trim();
+                    const tagsRaw = document.getElementById('form-tags').value.trim();
+                    const description = document.getElementById('form-description').value.trim();
+                    const instructions = document.getElementById('form-instructions').value.trim();
+
+                    const tags = tagsRaw.split(',').map(t => t.trim()).filter(t => t.length > 0);
+
+                    const newProject = {
+                        id: 'proj-' + Date.now(),
+                        title,
+                        author,
+                        status,
+                        link,
+                        tags: tags.length ? tags : ['General CS'],
+                        description,
+                        instructions,
+                        upvotes: 1,
+                        userUpvoted: true,
+                        comments: [],
+                        createdAt: Date.now()
+                    };
+
+                    projects.unshift(newProject);
+                    saveData();
+                    renderProjects();
+                    projectForm.reset();
+                    closeModal(submitModal);
+                    showToast('🚀 Project published to showcase!');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
