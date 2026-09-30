@@ -1,2 +1,2 @@
-# Hack-Club-Project-Libraryy
+# Hack-Club-Project-Library
 It's in the name.
